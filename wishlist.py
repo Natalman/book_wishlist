@@ -18,6 +18,9 @@ def handle_choice(choice):
     elif choice == '4':
         new_book()
 
+    elif choice == '5':
+        delete_book()
+
     elif choice == 'q':
         quit()
 
@@ -40,6 +43,7 @@ def show_read():
 def book_read():
     ''' Get choice from user, edit datastore, display success/error'''
     book_id = ui.ask_for_book_id()
+
     if datastore.set_read(book_id, True):
         ui.message('Successfully updated')
     else:
@@ -52,6 +56,12 @@ def new_book():
     datastore.add_book(new_book)
     ui.message('Book added: ' + str(new_book))
 
+def delete_book():
+    '''Deleting book info from the wishlist'''
+    book_del = ui.ask_for_book_id()
+
+    if datastore.set_delete(book_del):
+        ui.message('The book has been deleted')
 
 def quit():
     '''Perform shutdown tasks'''

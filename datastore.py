@@ -1,5 +1,5 @@
 
-import os
+import os, wishlist
 from book import Book
 
 DATA_DIR = 'data'
@@ -44,7 +44,7 @@ def shutdown():
     try:
         os.mkdir(DATA_DIR)
     except FileExistsError:
-        pass # Ignore - if directory exists, don't need to do anything. 
+        pass # Ignore - if directory exists, don't need to do anything.
 
     with open(BOOKS_FILE_NAME, 'w') as f:
         f.write(output_data)
@@ -91,10 +91,40 @@ def set_read(book_id, read):
 
         if book.id == book_id:
             book.read = True
+
+            # getting the rating for a book
+            rate = input("Do you want to rate the book? y/n")
+            if rate == 'y':
+                while True:
+                    try:
+                        book_rate = int(input ("Please rate from 1 to 5"))
+                        if book_rate >= 1 and book_rate <= 5:
+                            book_rating = str(book_rate) + " Stars"
+                            book.rating = book_rating
+                            break
+                        else:
+                            print("Please enter a number in range of 1 to 5")
+
+                    except ValueError:
+                        print("Please enter an integer")
+
+            else:
+                pass
             return True
 
     return False # return False if book id is not found
 
+# Function to delete book form the wishlist
+def set_delete(book_del):
+
+    global book_list
+
+    for book in book_list:
+        if book.id == book_del:
+            book_list.remove(book)
+            print("The book has been deleted")
+
+    return False
 
 
 def make_book_list(string_from_file):
@@ -118,7 +148,7 @@ def make_output_data():
     output_data = []
 
     for book in book_list:
-        output = [ book.title, book.author, str(book.read), str(book.id) ]
+        output = [ book.title, book.author, str(book.read), str(book.id), book.rating ]
         output_str = separator.join(output)
         output_data.append(output_str)
 
